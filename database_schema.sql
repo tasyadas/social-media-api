@@ -30,7 +30,7 @@ CREATE TABLE `comments` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_comments_tweet_id` (`tweet_id`),
-  CONSTRAINT `fk_comments_tweet_id` FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`)
+  CONSTRAINT `fk_comments_tweet_id` FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -55,8 +55,8 @@ CREATE TABLE `tag_tweet` (
   `tweet_id` binary(16) DEFAULT NULL,
   KEY `fk_tag_tweet_tag_id` (`tag_id`),
   KEY `fk_tag_tweet_tweet_id` (`tweet_id`),
-  CONSTRAINT `fk_tag_tweet_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`),
-  CONSTRAINT `fk_tag_tweet_tweet_id` FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`)
+  CONSTRAINT `fk_tag_tweet_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_tag_tweet_tweet_id` FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -110,7 +110,7 @@ CREATE TABLE `tweets` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_tweets_user_id` (`user_id`),
-  CONSTRAINT `fk_tweets_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `fk_tweets_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -135,6 +135,8 @@ CREATE TABLE `users` (
   `username` varchar(20) NOT NULL,
   `email` varchar(20) NOT NULL,
   `bio` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

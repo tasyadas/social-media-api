@@ -52,4 +52,14 @@ class User
 
     users
   end
+
+  def self.find_single_user(id)
+    user = self.get_all_user.find{|x| x.id == id}
+
+    if user.nil?
+      raise "User with id #{id} not found"
+    end
+
+    user
+  end
 end

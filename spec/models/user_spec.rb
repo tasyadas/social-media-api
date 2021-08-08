@@ -100,4 +100,13 @@ describe User do
       end
     end
   end
+
+  describe '#find_single_user' do
+    context "when id doesn't exist" do
+      it 'should raise an error' do
+        id = '1'
+        expect { User.find_single_user(id) }.to raise_error("User with id #{id} not found")
+      end
+    end
+  end
 end

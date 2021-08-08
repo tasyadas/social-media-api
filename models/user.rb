@@ -26,7 +26,7 @@ class User
 
   def exist?
     query = create_db_client.query("SELECT COUNT(*) as count FROM users WHERE username = '#{username}' OR email = '#{email}'")
-    query.nil?
+    query.each {|data| return data['count'] >= 1}
   end
 
   def valid?

@@ -23,6 +23,10 @@ describe User do
   end
 
   describe '#exist?' do
+    before(:each) do
+      create_db_client(0).query("TRUNCATE TABLE users")
+    end
+
     context "when email or username doesn't exist yet" do
       it 'should return false' do
         user = User.new({
@@ -31,6 +35,19 @@ describe User do
         })
 
         expect(user.exist?).to be_falsey
+      end
+    end
+
+    context "when email or username already exist" do
+      it 'should return true' do
+        user = User.new({
+          :username => 'tasyaaa',
+          :email    => 'tasya@mail.com'
+        })
+
+        user.save
+
+        expect(user.exist?).to eq(true)
       end
     end
   end
@@ -62,6 +79,13 @@ describe User do
   describe '#get_all_user' do
     context 'when there is several data from database' do
       it 'should return array of User instance' do
+        user = User.new({
+          :username => 'tasyaaa',
+          :email    => 'tasya@mail.com'
+        })
+
+        user.save
+
         expect(User.get_all_user).to include(User)
       end
     end

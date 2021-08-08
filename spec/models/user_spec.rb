@@ -78,6 +78,27 @@ describe User do
     end
   end
 
+  describe '#delete' do
+    context 'when given valid parameter' do
+      it 'should delete one user from db' do
+        user = User.get_last_item
+
+        expect(user.delete).to eq(true)
+      end
+    end
+
+    context 'when given invalid parameter' do
+      it 'should return false' do
+        user = User.new({
+            :username => 'tasyaaa',
+            :email    => 'tasya@mail.com'
+         })
+
+        expect(user.delete).to be_falsey
+      end
+    end
+  end
+
   describe '#get_all_user' do
     before(:each) do
       create_db_client(0).query("TRUNCATE TABLE users")
@@ -113,7 +134,7 @@ describe User do
 
     context "when id exist" do
       it 'should return hash of User model' do
-        id = User.get_all_user[0].id
+        id = User.get_last_item.id
         expect(User.find_single_user(id)).to be_a(User)
       end
     end

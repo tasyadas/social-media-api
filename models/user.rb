@@ -36,6 +36,12 @@ class User
     true
   end
 
+  def delete
+    return false if id.nil?
+    create_db_client.query("DELETE FROM users WHERE id = UUID_TO_BIN('#{id}')")
+    true
+  end
+
   def exist?
     query = create_db_client.query("SELECT COUNT(*) as count FROM users WHERE username = '#{username}' OR email = '#{email}'")
     query.each {|data| return data['count'] >= 1}

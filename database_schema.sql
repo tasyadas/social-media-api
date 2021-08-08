@@ -105,7 +105,7 @@ CREATE TABLE `tweets` (
   `id` binary(16) NOT NULL,
   `tweet` tinytext NOT NULL,
   `user_id` binary(16) DEFAULT NULL,
-  `media` blob,
+  `media` blob DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),

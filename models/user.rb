@@ -40,7 +40,6 @@ class User
   end
 
   def delete
-    return false if id.nil?
     create_db_client.query("DELETE FROM users WHERE id = UUID_TO_BIN('#{id}')")
     true
   end

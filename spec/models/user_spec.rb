@@ -86,17 +86,6 @@ describe User do
         expect(user.delete).to eq(true)
       end
     end
-
-    context 'when given invalid parameter' do
-      it 'should return false' do
-        user = User.new({
-            :username => 'tasyaaa',
-            :email    => 'tasya@mail.com'
-         })
-
-        expect(user.delete).to be_falsey
-      end
-    end
   end
 
   describe '#get_all_user' do

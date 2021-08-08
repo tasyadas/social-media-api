@@ -1,6 +1,10 @@
 require_relative '../models/user'
 
 class UserController
+  def self.index
+    User.get_all_user
+  end
+
   def self.create(params)
     user = User.new(params)
 
@@ -15,5 +19,11 @@ class UserController
 
     return 'wrong parameter' unless user.valid?
     user.update
+  end
+
+  def self.destroy(id)
+    user = User.find_single_user(id)
+
+    user.delete
   end
 end

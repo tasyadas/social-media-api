@@ -62,4 +62,14 @@ class User
 
     user
   end
+
+  def self.get_last_item
+    user = self.get_all_user.max_by{|x| x.id}
+
+    if user.nil?
+      raise "There is no User"
+    end
+
+    user
+  end
 end

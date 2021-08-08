@@ -116,4 +116,22 @@ describe User do
       end
     end
   end
+
+  describe '#get_last_item' do
+    context 'when table users is not empty' do
+      it 'should return hash of User model' do
+        expect(User.get_last_item).to be_a(User)
+      end
+    end
+
+    context 'when table users is empty' do
+      before(:each) do
+        create_db_client(0).query("TRUNCATE TABLE users")
+      end
+
+      it 'should return hash of User model' do
+        expect { User.get_last_item }.to raise_error("There is no User")
+      end
+    end
+  end
 end

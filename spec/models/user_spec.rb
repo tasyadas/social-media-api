@@ -77,6 +77,16 @@ describe User do
   end
 
   describe '#get_all_user' do
+    before(:each) do
+      create_db_client(0).query("TRUNCATE TABLE users")
+    end
+
+    context 'when there is no data in database' do
+      it 'should return empty array' do
+        expect(User.get_all_user).to eq([])
+      end
+    end
+
     context 'when there is several data from database' do
       it 'should return array of User instance' do
         user = User.new({

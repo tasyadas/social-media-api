@@ -11,7 +11,9 @@ describe User do
 
         expect(user.valid?).to eq(true)
       end
+      end
 
+    context 'when given invalid parameter' do
       it 'should return false' do
         user = User.new({
             :username => 'tasyaaa',
@@ -113,6 +115,27 @@ describe User do
       it 'should return hash of User model' do
         id = User.get_all_user[0].id
         expect(User.find_single_user(id)).to be_a(User)
+      end
+    end
+  end
+
+  describe '#update' do
+    context "when given valid parameters" do
+      it 'should return true' do
+        user = User.get_last_item
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        expect(mock_client).to receive(:query).with(
+          'UPDATE users' +
+            'SET' +
+            "username = '#{user.username}'," +
+            "email = '#{user.email}'," +
+            "bio = '#{user.bio}'" +
+            "WHERE id = UUID_TO_BIN('#{user.id}')"
+        )
+
+        expect(user.update).to eq(true)
       end
     end
   end

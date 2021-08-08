@@ -23,14 +23,15 @@ describe User do
   end
 
   describe '#exist?' do
-    context "when email or username doesn't exist yet"
-    it 'should return false' do
-      user = User.new({
-        :username => 'tasyaaa',
-        :email    => 'tasya@mail.com'
-      })
+    context "when email or username doesn't exist yet" do
+      it 'should return false' do
+        user = User.new({
+          :username => 'tasyaaa',
+          :email    => 'tasya@mail.com'
+        })
 
-      expect(user.exist?).to be_falsey
+        expect(user.exist?).to be_falsey
+      end
     end
   end
 
@@ -54,6 +55,14 @@ describe User do
         )
 
         expect(user.save).to eq(true)
+      end
+    end
+  end
+
+  describe '#get_all_user' do
+    context 'when there is several data from database' do
+      it 'should return array of User instance' do
+        expect(User.get_all_user).to include(User)
       end
     end
   end

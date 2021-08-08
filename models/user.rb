@@ -25,7 +25,7 @@ class User
   end
 
   def exist?
-    query = create_db_client.query("SELECT COUNT(*) FROM users WHERE username = '#{username}' OR email = '#{email}'")
+    query = create_db_client.query("SELECT COUNT(*) as count FROM users WHERE username = '#{username}' OR email = '#{email}'")
     query.nil?
   end
 
@@ -33,5 +33,23 @@ class User
     return false if username.nil?
     return false if email.nil?
     true
+  end
+
+  def self.get_all_user
+    db_raw = create_db_client.query("select * , BIN_TO_UUID(id) AS id from users")
+
+    users = Array.new
+
+    db_raw.each do |data|
+      user = User.new({
+        :id       => data["id"],
+        :username => data["username"],
+        :email    => data["email"],
+        :bio      => data["bio"]
+      })
+      users.push(user)
+    end
+
+    users
   end
 end

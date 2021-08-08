@@ -108,5 +108,12 @@ describe User do
         expect { User.find_single_user(id) }.to raise_error("User with id #{id} not found")
       end
     end
+
+    context "when id exist" do
+      it 'should return hash of User model' do
+        id = User.get_all_user[0].id
+        expect(User.find_single_user(id)).to be_a(User)
+      end
+    end
   end
 end

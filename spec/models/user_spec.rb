@@ -33,4 +33,28 @@ describe User do
       expect(user.exist?).to be_falsey
     end
   end
+
+  describe '#save' do
+    context "when given valid parameter" do
+      it 'should return true' do
+        user = User.new({
+          :username => 'tasyaaa',
+          :email    => 'tasya@mail.com'
+        })
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        expect(mock_client).to receive(:query).with(
+          'INSERT INTO users (id, username, email, bio)' +
+          'VALUES (' +
+          'UUID_TO_BIN(UUID()),' +
+          "'#{user.username}'," +
+          "'#{user.email}'," +
+          "'#{user.bio}')"
+        )
+
+        expect(user.save).to eq(true)
+      end
+    end
+  end
 end

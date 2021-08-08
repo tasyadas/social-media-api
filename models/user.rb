@@ -11,14 +11,27 @@ class User
     @bio        = param.key?(:bio) ? param[:bio] : nil
   end
 
+  def save
+    create_db_client.query(
+      'INSERT INTO users (id, username, email, bio)' +
+      'VALUES (' +
+      'UUID_TO_BIN(UUID()),' +
+      "'#{username}'," +
+      "'#{email}'," +
+      "'#{bio}')"
+    )
+
+    true
+  end
+
   def exist?
-    query = create_db_client.query("SELECT COUNT(*) FROM users WHERE username = #{@username} OR email = #{@email}")
+    query = create_db_client.query("SELECT COUNT(*) FROM users WHERE username = '#{username}' OR email = '#{email}'")
     query.nil?
   end
 
   def valid?
-    return false if @username.nil?
-    return false if @email.nil?
+    return false if username.nil?
+    return false if email.nil?
     true
   end
 end

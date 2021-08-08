@@ -21,4 +21,16 @@ describe User do
       end
     end
   end
+
+  describe '#exist?' do
+    context "when email or username doesn't exist yet"
+    it 'should return false' do
+      user = User.new({
+        :username => 'tasyaaa',
+        :email    => 'tasya@mail.com'
+      })
+
+      expect(user.exist?).to be_falsey
+    end
+  end
 end

@@ -2,13 +2,15 @@ require_relative '../db/mysql_connector'
 
 class User
 
-  attr_accessor :id, :username, :email, :bio
+  attr_accessor :id, :username, :email, :bio, :created_at, :updated_at
 
   def initialize(param)
     @id         = param.key?(:id) ? param[:id] : nil
     @username   = param[:username]
     @email      = param[:email]
     @bio        = param.key?(:bio) ? param[:bio] : nil
+    @created_at = param.key?(:created_at) ? param[:created_at] : nil
+    @updated_at = param.key?(:updated_at) ? param[:updated_at] : nil
   end
 
   def save
@@ -26,11 +28,12 @@ class User
 
   def update
     create_db_client.query(
-      'UPDATE users' +
-        'SET' +
+      'UPDATE users ' +
+        'SET ' +
         "username = '#{username}'," +
         "email = '#{email}'," +
-        "bio = '#{bio}'" +
+        "bio = '#{bio}'," +
+        'updated_at = CURRENT_TIMESTAMP ' +
         "WHERE id = UUID_TO_BIN('#{id}')"
     )
     true
@@ -60,10 +63,12 @@ class User
 
     db_raw.each do |data|
       user = User.new({
-        :id       => data["id"],
-        :username => data["username"],
-        :email    => data["email"],
-        :bio      => data["bio"]
+        :id         => data["id"],
+        :username   => data["username"],
+        :email      => data["email"],
+        :bio        => data["bio"],
+        :created_at => data["created_at"],
+        :updated_at => data["updated_at"],
       })
       users.push(user)
     end
@@ -82,7 +87,7 @@ class User
   end
 
   def self.get_last_item
-    user = self.get_all_user.max_by{|x| x.id}
+    user = self.get_all_user.max_by{|x| x.created_at}
 
     if user.nil?
       raise "There is no User"

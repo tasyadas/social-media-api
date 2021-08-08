@@ -11,7 +11,7 @@ describe User do
 
         expect(user.valid?).to eq(true)
       end
-      end
+    end
 
     context 'when given invalid parameter' do
       it 'should return false' do
@@ -148,11 +148,12 @@ describe User do
         mock_client = double
         allow(Mysql2::Client).to receive(:new).and_return(mock_client)
         expect(mock_client).to receive(:query).with(
-          'UPDATE users' +
-            'SET' +
+          'UPDATE users ' +
+            'SET ' +
             "username = '#{user.username}'," +
             "email = '#{user.email}'," +
-            "bio = '#{user.bio}'" +
+            "bio = '#{user.bio}'," +
+            'updated_at = CURRENT_TIMESTAMP ' +
             "WHERE id = UUID_TO_BIN('#{user.id}')"
         )
 

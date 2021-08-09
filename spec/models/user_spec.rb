@@ -67,7 +67,7 @@ describe User do
         expect(mock_client).to receive(:query).with(
           'INSERT INTO users (id, username, email, bio)' +
           'VALUES (' +
-          'UUID_TO_BIN(UUID()),' +
+          'UUID(),' +
           "'#{user.username}'," +
           "'#{user.email}'," +
           "'#{user.bio}')"
@@ -143,7 +143,7 @@ describe User do
             "email = '#{user.email}'," +
             "bio = '#{user.bio}'," +
             'updated_at = CURRENT_TIMESTAMP ' +
-            "WHERE id = UUID_TO_BIN('#{user.id}')"
+            "WHERE id = '#{user.id}'"
         )
 
         expect(user.update).to eq(true)

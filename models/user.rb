@@ -17,7 +17,7 @@ class User
     create_db_client.query(
       'INSERT INTO users (id, username, email, bio)' +
       'VALUES (' +
-      'UUID_TO_BIN(UUID()),' +
+      'UUID(),' +
       "'#{username}'," +
       "'#{email}'," +
       "'#{bio}')"
@@ -34,13 +34,13 @@ class User
         "email = '#{email}'," +
         "bio = '#{bio}'," +
         'updated_at = CURRENT_TIMESTAMP ' +
-        "WHERE id = UUID_TO_BIN('#{id}')"
+        "WHERE id = '#{id}'"
     )
     true
   end
 
   def delete
-    create_db_client.query("DELETE FROM users WHERE id = UUID_TO_BIN('#{id}')")
+    create_db_client.query("DELETE FROM users WHERE id = '#{id}'")
     true
   end
 
@@ -56,7 +56,7 @@ class User
   end
 
   def self.get_all_user
-    db_raw = create_db_client.query("select * , BIN_TO_UUID(id) AS id from users")
+    db_raw = create_db_client.query("select * , id AS id from users")
 
     users = Array.new
 

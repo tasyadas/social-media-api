@@ -23,8 +23,8 @@ DROP TABLE IF EXISTS `tag_comment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tag_comment` (
-                             `tag_id` binary(16) DEFAULT NULL,
-                             `comment_id` binary(16) DEFAULT NULL,
+                             `tag_id` VARCHAR(36) DEFAULT NULL,
+                             `comment_id` VARCHAR(36) DEFAULT NULL,
                              KEY `fk_tag_comment_tag_id` (`tag_id`),
                              KEY `fk_tag_comment_comment_id` (`comment_id`),
                              CONSTRAINT `fk_tag_comment_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -49,10 +49,10 @@ DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comments` (
-  `id` binary(16) NOT NULL,
+  `id` VARCHAR(36) NOT NULL,
   `comment` tinytext NOT NULL,
-  `tweet_id` binary(16) DEFAULT NULL,
-  `user_id` binary(16) DEFAULT NULL,
+  `tweet_id` VARCHAR(36) DEFAULT NULL,
+  `user_id` VARCHAR(36) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -80,8 +80,8 @@ DROP TABLE IF EXISTS `tag_tweet`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tag_tweet` (
-  `tag_id` binary(16) DEFAULT NULL,
-  `tweet_id` binary(16) DEFAULT NULL,
+  `tag_id` VARCHAR(36) DEFAULT NULL,
+  `tweet_id` VARCHAR(36) DEFAULT NULL,
   KEY `fk_tag_tweet_tag_id` (`tag_id`),
   KEY `fk_tag_tweet_tweet_id` (`tweet_id`),
   CONSTRAINT `fk_tag_tweet_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -106,7 +106,7 @@ DROP TABLE IF EXISTS `tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tags` (
-  `id` binary(16) NOT NULL,
+  `id` VARCHAR(36) NOT NULL,
   `name` tinytext NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -131,9 +131,9 @@ DROP TABLE IF EXISTS `tweets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tweets` (
-  `id` binary(16) NOT NULL,
+  `id` VARCHAR(36) NOT NULL,
   `tweet` tinytext NOT NULL,
-  `user_id` binary(16) DEFAULT NULL,
+  `user_id` VARCHAR(36) DEFAULT NULL,
   `media` blob DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -160,7 +160,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `id` binary(16) NOT NULL,
+  `id` VARCHAR(36) NOT NULL,
   `username` varchar(20) NOT NULL,
   `email` varchar(20) NOT NULL,
   `bio` varchar(255) DEFAULT NULL,

@@ -64,4 +64,12 @@ describe Tweet do
       end
     end
   end
+
+  describe "#get_all_tweet_with_relation" do
+    context 'when there is several data from database' do
+      it 'should return array of Tweet instance' do
+        expect(Tweet.get_all_tweet_with_relation).to include(Tweet)
+      end
+    end
+  end
 end

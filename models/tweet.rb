@@ -16,6 +16,15 @@ class Tweet
     @updated_at = param.key?(:updated_at) ? param[:updated_at] : nil
   end
 
+  def save
+    create_db_client.query(
+      'INSERT INTO tweets ' +
+      '(id, tweet, media, user_id)' +
+      'VALUES ( ' +
+      ''
+    )
+  end
+
   def validate
     return "tweet cannot be empty" if tweet.nil?
     return "user_id cannot be null" if user.nil?

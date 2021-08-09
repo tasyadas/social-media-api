@@ -16,6 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `tag_comment`
+--
+
+DROP TABLE IF EXISTS `tag_comment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tag_comment` (
+                             `tag_id` binary(16) DEFAULT NULL,
+                             `comment_id` binary(16) DEFAULT NULL,
+                             KEY `fk_tag_comment_tag_id` (`tag_id`),
+                             KEY `fk_tag_comment_comment_id` (`comment_id`),
+                             CONSTRAINT `fk_tag_comment_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                             CONSTRAINT `fk_tag_comment_comment_id` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tag_comment`
+--
+
+LOCK TABLES `tag_comment` WRITE;
+/*!40000 ALTER TABLE `tag_comment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tag_comment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `comments`
 --
 
@@ -26,11 +52,14 @@ CREATE TABLE `comments` (
   `id` binary(16) NOT NULL,
   `comment` tinytext NOT NULL,
   `tweet_id` binary(16) DEFAULT NULL,
+  `user_id` binary(16) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_comments_tweet_id` (`tweet_id`),
-  CONSTRAINT `fk_comments_tweet_id` FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_comments_user_id` (`user_id`),
+  CONSTRAINT `fk_comments_tweet_id` FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_comments_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

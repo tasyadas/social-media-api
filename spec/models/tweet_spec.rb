@@ -87,4 +87,36 @@ describe Tweet do
       end
     end
   end
+
+  describe "#find_single_tweet" do
+    context "when id doesn't exist" do
+      it 'should raise an error' do
+        id = '1'
+        expect { Tweet.find_single_tweet(id) }.to raise_error("Tweet with id #{id} not found")
+      end
+    end
+
+    context "when id exist" do
+      it 'should return hash of Tweet model' do
+        id = Tweet.get_last_item.id
+        expect(Tweet.find_single_tweet(id)).to be_a(Tweet)
+      end
+    end
+  end
+
+  describe '#get_last_item' do
+    context 'when table tweets is not empty' do
+      it 'should return hash of Tweet model' do
+        expect(Tweet.get_last_item).to be_a(Tweet)
+      end
+    end
+
+    context 'when table tweets is empty' do
+      it 'should return There is no Tweet' do
+        create_db_client(0).query("TRUNCATE TABLE tweets")
+
+        expect { Tweet.get_last_item }.to raise_error("There is no Tweet")
+      end
+    end
+  end
 end

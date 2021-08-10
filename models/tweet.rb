@@ -1,28 +1,30 @@
 require_relative '../db/mysql_connector'
 require_relative './user'
 require "date"
+require 'fileutils'
+
 include FileUtils::Verbose
 
 class Tweet
 
-  attr_accessor :id, :tweet, :media, :user, :tags
+  attr_accessor :id, :tweet, :media, :user, :tags, :comments, :updated_at, :created_at
 
-  def initialize(param)
-    @id         = param.key?(:id) ? param[:id] : nil
-    @tweet      = param[:tweet]
-    @media      = param.key?(:media) ? param[:media] : nil
-    @user       = param[:user]
-    @tags       = param.key?(:tags) ? param[:tags] : []
-    @comments   = param.key?(:comments) ? param[:comments] : []
-    @created_at = param.key?(:created_at) ? param[:created_at] : nil
-    @updated_at = param.key?(:updated_at) ? param[:updated_at] : nil
-  end
+    def initialize(param)
+      @id = param.key?(:id) ? param[:id] : nil
+      @tweet = param[:tweet]
+      @media = param.key?(:media) ? param[:media] : nil
+      @user = param[:user]
+      @tags = param.key?(:tags) ? param[:tags] : []
+      @comments = param.key?(:comments) ? param[:comments] : []
+      @created_at = param.key?(:created_at) ? param[:created_at] : nil
+      @updated_at = param.key?(:updated_at) ? param[:updated_at] : nil
+    end
 
   def save
-      filename = "#{user}-#{Time.now.usec}"
-      cp(media.tempfile.path, "public/uploads/#{filename}")
+    filename = media.tempfile.path.split('/').last
+    cp(media.tempfile.path, "public/uploads/#{filename}")
 
-      create_db_client.query(
+    create_db_client.query(
       'INSERT INTO tweets ' +
       '(id, tweet, media, user_id)' +
       'VALUES ( ' +
@@ -57,14 +59,36 @@ class Tweet
 
     db_raw.each do |data|
       tweet = Tweet.new({
-          :id     => data["id"],
-          :tweet  => data["tweet"],
-          :user   => User.find_single_user(data['user_id']),
+          :id         => data["id"],
+          :tweet      => data["tweet"],
+          :user       => User.find_single_user(data['user_id']),
+          :created_at => data["created_at"],
+          :updated_at => data["updated_at"],
         })
 
       tweets.push(tweet)
     end
 
     tweets
+  end
+
+  def self.find_single_tweet(id)
+    tweet = self.get_all_tweet_with_relation.find{|x| x.id == id}
+
+    if tweet.nil?
+      raise "Tweet with id #{id} not found"
+    end
+
+    tweet
+  end
+
+  def self.get_last_item
+    tweet = self.get_all_tweet_with_relation.max_by{|x| x.created_at}
+
+    if tweet.nil?
+      raise "There is no Tweet"
+    end
+
+    tweet
   end
 end

@@ -87,4 +87,13 @@ describe Tweet do
       end
     end
   end
+
+  describe "#find_single_tweet" do
+    context "when id doesn't exist" do
+      it 'should raise an error' do
+        id = '1'
+        expect { Tweet.find_single_tweet(id) }.to raise_error("Tweet with id #{id} not found")
+      end
+    end
+  end
 end

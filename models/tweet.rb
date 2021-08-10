@@ -67,4 +67,14 @@ class Tweet
 
     tweets
   end
+
+  def self.find_single_tweet(id)
+    tweet = self.get_all_tweet_with_relation.find{|x| x.id == id}
+
+    if tweet.nil?
+      raise "Tweet with id #{id} not found"
+    end
+
+    tweet
+  end
 end

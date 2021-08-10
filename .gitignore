@@ -54,3 +54,6 @@ build-iPhoneSimulator/
 
 # idea
 .idea
+
+# uploaded file
+/public/uploads/*

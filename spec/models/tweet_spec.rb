@@ -1,5 +1,6 @@
 require_relative '../../models/tweet'
 require_relative '../../models/user'
+require 'rack/test'
 
 describe Tweet do
   before(:all) do
@@ -61,6 +62,20 @@ describe Tweet do
         })
 
         expect(tweet.validate).to eq(true)
+      end
+    end
+  end
+
+  describe "#save" do
+    context "when given valid parameter" do
+      it 'should return true' do
+        tweet = Tweet.new({
+          :tweet => 'coba input media',
+          :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
+          :user => User.get_last_item.id
+        })
+
+        expect(tweet.save).to eq(true)
       end
     end
   end

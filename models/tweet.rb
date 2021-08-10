@@ -1,5 +1,7 @@
 require_relative '../db/mysql_connector'
 require_relative './user'
+require "date"
+include FileUtils::Verbose
 
 class Tweet
 
@@ -17,12 +19,21 @@ class Tweet
   end
 
   def save
-    create_db_client.query(
+      filename = "#{user}-#{Time.now.usec}"
+      cp(media.tempfile.path, "public/uploads/#{filename}")
+
+      create_db_client.query(
       'INSERT INTO tweets ' +
       '(id, tweet, media, user_id)' +
       'VALUES ( ' +
-      ''
+        'UUID(), ' +
+        "'#{tweet}', " +
+        "'#{filename}', " +
+        "'#{user}'" +
+      ')'
     )
+
+    true
   end
 
   def validate
@@ -35,8 +46,6 @@ class Tweet
   def self.get_all_tweet_with_relation
     db_raw = create_db_client.query(
       'SELECT tweets.*, ' +
-      'id AS id, ' +
-      'user_id AS user_id, ' +
       'tag_tweet.tag_id AS tag_id, ' +
       'comments.id AS comment_id ' +
       'FROM tweets ' +

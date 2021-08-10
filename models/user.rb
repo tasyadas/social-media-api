@@ -56,7 +56,7 @@ class User
   end
 
   def self.get_all_user
-    db_raw = create_db_client.query("select * , id AS id from users")
+    db_raw = create_db_client.query("select * from users")
 
     users = Array.new
 

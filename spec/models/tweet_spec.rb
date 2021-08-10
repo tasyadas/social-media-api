@@ -95,6 +95,13 @@ describe Tweet do
         expect { Tweet.find_single_tweet(id) }.to raise_error("Tweet with id #{id} not found")
       end
     end
+
+    context "when id exist" do
+      it 'should return hash of Tweet model' do
+        id = Tweet.get_last_item.id
+        expect(Tweet.find_single_tweet(id)).to be_a(Tweet)
+      end
+    end
   end
 
   describe '#get_last_item' do

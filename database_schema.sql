@@ -51,6 +51,7 @@ DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
   `id` VARCHAR(36) NOT NULL,
   `comment` tinytext NOT NULL,
+  `media` VARCHAR(255) DEFAULT NULL,
   `tweet_id` VARCHAR(36) DEFAULT NULL,
   `user_id` VARCHAR(36) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,

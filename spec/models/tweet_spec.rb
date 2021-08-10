@@ -96,4 +96,20 @@ describe Tweet do
       end
     end
   end
+
+  describe '#get_last_item' do
+    context 'when table tweets is not empty' do
+      it 'should return hash of Tweet model' do
+        expect(Tweet.get_last_item).to be_a(Tweet)
+      end
+    end
+
+    context 'when table tweets is empty' do
+      it 'should return There is no Tweet' do
+        create_db_client(0).query("TRUNCATE TABLE tweets")
+
+        expect { Tweet.get_last_item }.to raise_error("There is no Tweet")
+      end
+    end
+  end
 end

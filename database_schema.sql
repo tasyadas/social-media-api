@@ -134,7 +134,7 @@ CREATE TABLE `tweets` (
   `id` VARCHAR(36) NOT NULL,
   `tweet` tinytext NOT NULL,
   `user_id` VARCHAR(36) DEFAULT NULL,
-  `media` blob DEFAULT NULL,
+  `media` VARCHAR(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -163,7 +163,7 @@ CREATE TABLE `users` (
   `id` VARCHAR(36) NOT NULL,
   `username` varchar(20) NOT NULL,
   `email` varchar(20) NOT NULL,
-  `bio` varchar(255) DEFAULT NULL,
+  `bio` tinytext DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)

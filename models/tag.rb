@@ -95,7 +95,7 @@ class Tag
   end
 
   def self.find_single_tag(id)
-    tag = self.get_all_tag_with_relation.find{|x| x.id == id}
+    tag = self.get_all_tag.find{|x| x.id == id}
 
     if tag.nil?
       raise "Tag with id #{id} not found"
@@ -105,7 +105,7 @@ class Tag
   end
 
   def self.get_last_item
-    tag = self.get_all_tag_with_relation.max_by{|x| x.created_at}
+    tag = self.get_all_tag.max_by{|x| x.created_at}
 
     if tag.nil?
       raise "There is no Tag"

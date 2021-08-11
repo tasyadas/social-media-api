@@ -56,6 +56,31 @@ class Comment
     true if User.find_single_user(user) and Tweet.find_single_tweet(tweet)
   end
 
+  def self.get_all_comment
+    db_raw = @@client.query(
+      'SELECT comments.* ' +
+      'FROM comments'
+    )
+
+    comments = Array.new
+
+    db_raw.each do |data|
+
+      comment = Comment.new({
+        :id           => data["id"],
+        :comment      => data["comment"],
+        :user         => User.find_single_user(data['user_id']),
+        :tweet        => Tweet.find_single_tweet(data['tweet_id']),
+        :created_at   => data["created_at"],
+        :updated_at   => data["updated_at"],
+      })
+
+      comments.push(comment)
+    end
+
+    comments
+  end
+
   def self.get_all_comment_with_relation
     db_raw = @@client.query(
       'SELECT comments.*, ' +
@@ -91,7 +116,7 @@ class Comment
   end
 
   def self.find_single_comment(id)
-    comment = self.get_all_comment_with_relation.find{|x| x.id == id}
+    comment = self.get_all_comment.find{|x| x.id == id}
 
     if comment.nil?
       raise "Comment with id #{id} not found"
@@ -101,7 +126,7 @@ class Comment
   end
 
   def self.get_last_item
-    comment = self.get_all_comment_with_relation.max_by{|x| x.created_at}
+    comment = self.get_all_comment.max_by{|x| x.created_at}
 
     if comment.nil?
       raise "There is no Comment"

@@ -27,6 +27,13 @@ describe Comment do
     @tweet  = Tweet.get_last_item
   end
 
+  after(:all) do
+    create_db_client(0).query("TRUNCATE TABLE tag_comment")
+    create_db_client(0).query("TRUNCATE TABLE tags")
+    create_db_client(0).query("TRUNCATE TABLE tweets")
+    create_db_client(0).query("TRUNCATE TABLE users")
+  end
+
   describe "#valid?" do
     context 'when given invalid parameter' do
       it 'should return comment cannot be empty' do
@@ -120,6 +127,14 @@ describe Comment do
         comment.tags << tag
 
         expect(comment.save).to eq(true)
+      end
+    end
+  end
+
+  describe "#get_all_comment" do
+    context 'when there is several data from database' do
+      it 'should return array of Comment instance' do
+        expect(Comment.get_all_comment).to include(Comment)
       end
     end
   end

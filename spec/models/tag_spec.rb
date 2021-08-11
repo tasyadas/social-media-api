@@ -1,6 +1,7 @@
 require_relative '../../models/tag'
 require_relative '../../models/tweet'
 require_relative '../../models/comment'
+require 'rack/test'
 
 describe Tag do
   describe "#save" do
@@ -21,8 +22,10 @@ describe Tag do
         tweet = Tweet.new({
           :tweet => 'coba input media',
           :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
-          :user => User.get_last_item.id
+          :user  => User.get_last_item.id
         })
+
+        tweet.tags << Tag.get_last_item
 
         tweet.save
 
@@ -38,7 +41,9 @@ describe Tag do
       end
 
       it 'should return hash of Tweet model' do
-        id = @tag[0][:comments][0].id
+        tag = @tag.find{|x| x.tweets.length > 0}
+        id = tag.tweets[0].id
+
         expect(Tweet.find_single_tweet(id)).to be_a(Tweet)
       end
     end

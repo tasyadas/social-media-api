@@ -41,7 +41,7 @@ class Tweet
           'INSERT INTO tag_tweet ' +
           '(tweet_id, tag_id)' +
           'VALUES ( ' +
-            "select id from tweets order by created_at desc limit 1, " +
+            "(select id AS tweet_id from tweets order by created_at desc limit 1), " +
             "'#{tag.id}'" +
           ')'
         )

@@ -46,8 +46,8 @@ class Tag
       tag     = tags.find{|h| h.id == data['id']}
 
       if tag
-        tag.tweets.push(tweet) if tweet
-        tag.comments.push(comment) if comment
+        tag.tweets.push(tweet) unless tweet.nil?
+        tag.comments.push(comment) unless comment.nil?
       else
         tag = Tag.new({
           :id         => data["id"],
@@ -55,6 +55,9 @@ class Tag
           :created_at => data['created_at'],
           :updated_at => data['updated_at']
         })
+
+        tag.tweets.push(tweet) unless tweet.nil?
+        tag.comments.push(comment) unless comment.nil?
 
         tags.push(tag)
       end

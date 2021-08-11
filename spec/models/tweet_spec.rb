@@ -86,6 +86,14 @@ describe Tweet do
         expect(Tweet.get_all_tweet_with_relation).to include(Tweet)
       end
     end
+
+    context 'when there is no data in database' do
+      it 'should return empty array' do
+        create_db_client(0).query("TRUNCATE TABLE tweets")
+
+        expect(Tweet.get_all_tweet_with_relation).to eq([])
+      end
+    end
   end
 
   describe "#find_single_tweet" do

@@ -72,7 +72,7 @@ describe Tweet do
         tweet = Tweet.new({
           :tweet => 'coba input media',
           :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
-          :user => User.get_last_item.id
+          :user  => User.get_last_item.id
         })
 
         expect(tweet.save).to eq(true)

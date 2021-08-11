@@ -16,9 +16,31 @@ describe Tag do
     end
   end
 
+  describe "#get_all_tag" do
+    context 'when there is several data from database' do
+      it 'should return array of Tag instance' do
+        expect(Tag.get_all_tag_with_relation).to include(Tag)
+      end
+    end
+
+    context 'when there is no data in database' do
+      it 'should return empty array' do
+        create_db_client(0).query("TRUNCATE TABLE tags")
+
+        expect(Tag.get_all_tag_with_relation).to eq([])
+      end
+    end
+  end
+
   describe "#get_all_tag_with_relation" do
     context 'when there is several data from database' do
       before(:all) do
+        tag = Tag.new({
+          :name => 'GenerasiGigih',
+        })
+
+        tag.save
+
         tweet = Tweet.new({
           :tweet => 'coba input media',
           :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),

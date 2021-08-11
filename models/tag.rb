@@ -58,4 +58,14 @@ class Tag
 
     tags
   end
+
+  def self.find_single_tag(id)
+    tag = self.get_all_tag_with_relation.find{|x| x.id == id}
+
+    if tag.nil?
+      raise "Tag with id #{id} not found"
+    end
+
+    tag
+  end
 end

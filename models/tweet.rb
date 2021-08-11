@@ -1,7 +1,9 @@
+require 'date'
+require 'fileutils'
+
 require_relative '../db/mysql_connector'
 require_relative './user'
-require "date"
-require 'fileutils'
+require_relative './comment'
 
 include FileUtils::Verbose
 
@@ -58,6 +60,29 @@ class Tweet
     true if User.find_single_user(user)
   end
 
+  def self.get_all_tweet
+    db_raw = create_db_client.query(
+      'SELECT tweets.* ' +
+      'FROM tweets'
+    )
+
+    tweets = Array.new
+
+    db_raw.each do |data|
+      tweet = Tweet.new({
+        :id         => data["id"],
+        :tweet      => data["tweet"],
+        :user       => User.find_single_user(data['user_id']),
+        :created_at => data["created_at"],
+        :updated_at => data["updated_at"],
+      })
+
+      tweets << tweet
+    end
+
+    tweets
+  end
+
   def self.get_all_tweet_with_relation
     db_raw = create_db_client.query(
       'SELECT tweets.*, ' +
@@ -71,14 +96,22 @@ class Tweet
     tweets = Array.new
 
     db_raw.each do |data|
-      tweet = Tweet.new({
+      tweet   = tweets.find{|h| h.id == data['id']}
+      tag     = data['tag_id'] ? Tag.find_single_tag(data['tag_id']) : nil
+      comment = data['comment_id'] ? Comment.find_single_comment(data['comment_id']) : nil
+
+      if tweet.nil?
+        tweet = Tweet.new({
           :id         => data["id"],
           :tweet      => data["tweet"],
           :user       => User.find_single_user(data['user_id']),
           :created_at => data["created_at"],
           :updated_at => data["updated_at"],
         })
+      end
 
+      tweet.tags.push(tag) unless tag.nil?
+      tweet.comments.push(comment) unless comment.nil?
       tweets.push(tweet)
     end
 
@@ -86,7 +119,7 @@ class Tweet
   end
 
   def self.find_single_tweet(id)
-    tweet = self.get_all_tweet_with_relation.find{|x| x.id == id}
+    tweet = self.get_all_tweet.find{|x| x.id == id}
 
     if tweet.nil?
       raise "Tweet with id #{id} not found"
@@ -96,7 +129,7 @@ class Tweet
   end
 
   def self.get_last_item
-    tweet = self.get_all_tweet_with_relation.max_by{|x| x.created_at}
+    tweet = self.get_all_tweet.max_by{|x| x.created_at}
 
     if tweet.nil?
       raise "There is no Tweet"

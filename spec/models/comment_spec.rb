@@ -1,3 +1,6 @@
+require_relative './user_spec'
+require_relative './tweet_spec'
+require_relative './tag_spec'
 require_relative '../../models/comment'
 require_relative '../../models/tweet'
 require_relative '../../models/user'

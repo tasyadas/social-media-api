@@ -1,9 +1,29 @@
+require_relative './comment_spec'
+require_relative './tweet_spec'
 require_relative '../../models/tag'
 require_relative '../../models/tweet'
 require_relative '../../models/comment'
 require 'rack/test'
 
 describe Tag do
+  before(:all) do
+    user = User.new({
+      :username => 'syaaa',
+      :email    => 'tasya@mail.com',
+      :bio      => 'Welcome to my life!'
+    })
+
+    user.save
+  end
+
+  after(:all) do
+    create_db_client(0).query("TRUNCATE TABLE tags")
+    create_db_client(0).query("TRUNCATE TABLE comments")
+    create_db_client(0).query("TRUNCATE TABLE tweets")
+    create_db_client(0).query("TRUNCATE TABLE tag_tweet")
+    create_db_client(0).query("TRUNCATE TABLE users")
+  end
+
   describe "#save" do
     context "when given valid params" do
       it 'should return true' do

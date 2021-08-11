@@ -30,12 +30,8 @@ class Tag
 
   def self.get_all_tag
     db_raw = create_db_client.query(
-      'SELECT tags.*, ' +
-        'tag_tweet.tweet_id AS tweet_id, ' +
-        'tag_comment.comment_id AS comment_id ' +
-        'FROM tags ' +
-        'LEFT JOIN tag_tweet ON tag_tweet.tag_id = tags.id ' +
-        'LEFT JOIN tag_comment ON tag_comment.tag_id = tags.id'
+      'SELECT tags.* ' +
+      'FROM tags'
     )
 
     tags = Array.new

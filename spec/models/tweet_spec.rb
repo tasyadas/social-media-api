@@ -1,4 +1,9 @@
+require_relative './user_spec'
+require_relative './comment_spec'
+require_relative './tag_spec'
 require_relative '../../models/tweet'
+require_relative '../../models/comment'
+require_relative '../../models/tag'
 require_relative '../../models/user'
 require 'rack/test'
 
@@ -11,6 +16,14 @@ describe Tweet do
     })
 
     user.save
+  end
+
+  after(:all) do
+    create_db_client(0).query("TRUNCATE TABLE tags")
+    create_db_client(0).query("TRUNCATE TABLE comments")
+    create_db_client(0).query("TRUNCATE TABLE tweets")
+    create_db_client(0).query("TRUNCATE TABLE tag_tweet")
+    create_db_client(0).query("TRUNCATE TABLE users")
   end
 
   describe "#valid?" do
@@ -69,21 +82,28 @@ describe Tweet do
   describe "#save" do
     context "when given valid parameter" do
       it 'should return true' do
+        tag = Tag.new({
+          :name => 'GenerasiGigih',
+        })
+        tag.save
+        tag = Tag.get_last_item
+
         tweet = Tweet.new({
           :tweet => 'coba input media',
           :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
           :user  => User.get_last_item.id
         })
+        tweet.tags << tag
 
         expect(tweet.save).to eq(true)
       end
     end
   end
 
-  describe "#get_all_tweet_with_relation" do
+  describe "#get_all_tweet" do
     context 'when there is several data from database' do
       it 'should return array of Tweet instance' do
-        expect(Tweet.get_all_tweet_with_relation).to include(Tweet)
+        expect(Tweet.get_all_tweet).to include(Tweet)
       end
     end
 
@@ -91,7 +111,90 @@ describe Tweet do
       it 'should return empty array' do
         create_db_client(0).query("TRUNCATE TABLE tweets")
 
-        expect(Tweet.get_all_tweet_with_relation).to eq([])
+        expect(Tweet.get_all_tweet).to eq([])
+      end
+    end
+  end
+
+  describe "#get_all_tweet_with_relation" do
+    before(:all) do
+      tag = Tag.new({
+        :name => 'GenerasiGigih',
+      })
+      tag.save
+      tag = Tag.get_last_item
+
+      tweet = Tweet.new({
+        :tweet => 'coba input media',
+        :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
+        :user  => User.get_last_item.id
+      })
+      tweet.tags << tag
+      tweet.save
+
+      comment = Comment.new({
+        :comment => 'coba input media',
+        :media   => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
+        :user    => User.get_last_item.id,
+        :tweet   => Tweet.get_last_item.id
+      })
+      comment.tags << tag
+      comment.save
+
+      @tweets   = Tweet.get_all_tweet_with_relation
+    end
+
+    context 'when there is several data from database' do
+      it 'should call #find_single_user' do
+        id = User.get_last_item.id
+        expect(User.find_single_user(id)).to be_a(User)
+      end
+
+      it 'should return array of Tweet instance' do
+        expect(@tweets).to include(Tweet)
+      end
+
+      it 'should call #get_all_comment' do
+        expect(Comment.get_all_comment).to include(Comment)
+      end
+
+      it 'should return hash of Comment model' do
+        tweet   = @tweets.find{|x| x.comments.length > 0}
+        id      = tweet.comments[0].id
+
+        expect(Comment.find_single_comment(id)).to be_a(Comment)
+      end
+
+      it 'should call #get_all_tag' do
+        expect(Tag.get_all_tag).to include(Tag)
+      end
+
+      it 'should return hash of Tag model' do
+        tweet   = @tweets.find{|x| x.tags.length > 0}
+        id      = tweet.tags[0].id
+
+        expect(Tag.find_single_tag(id)).to be_a(Tag)
+      end
+    end
+
+    context "when user_id doesn't exist" do
+      it 'should raise an error' do
+        id = '1'
+        expect { User.find_single_user(id) }.to raise_error("User with id #{id} not found")
+      end
+    end
+
+    context "when comment_id doesn't exist" do
+      it 'should raise an error' do
+        id = '1'
+        expect { Comment.find_single_comment(id) }.to raise_error("Comment with id #{id} not found")
+      end
+    end
+
+    context "when tag_id doesn't exist" do
+      it 'should raise an error' do
+        id = '1'
+        expect { Tag.find_single_tag(id) }.to raise_error("Tag with id #{id} not found")
       end
     end
   end

@@ -1,5 +1,6 @@
 require_relative '../db/mysql_connector'
 require_relative './tag'
+require_relative './tweet'
 
 class Comment
   attr_accessor :id, :comment, :media, :user, :tweet, :tags, :created_at, :updated_at
@@ -22,14 +23,14 @@ class Comment
 
     @@client.query(
       'INSERT INTO comments ' +
-        '(id, comment, media, user_id, tweet_id)' +
-        'VALUES ( ' +
-          'UUID(), ' +
-          "'#{comment}', " +
-          "'#{filename}', " +
-          "'#{user}', " +
-          "'#{tweet}'" +
-        ')'
+      '(id, comment, media, user_id, tweet_id)' +
+      'VALUES ( ' +
+        'UUID(), ' +
+        "'#{comment}', " +
+        "'#{filename}', " +
+        "'#{user}', " +
+        "'#{tweet}'" +
+      ')'
     )
 
     if tags.length > 0

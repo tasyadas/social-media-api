@@ -4,18 +4,19 @@ require_relative './tweet'
 class Tag
 
   attr_accessor :id, :name, :tweets, :comments, :created_at, :updated_at
+  @@client = create_db_client
 
-    def initialize(param)
-      @id         = param.key?(:id) ? param[:id] : nil
-      @name       = param[:name]
-      @tweets     = param.key?(:tweets) ? param[:tweets] : []
-      @comments   = param.key?(:comments) ? param[:comments] : []
-      @created_at = param.key?(:created_at) ? param[:created_at] : nil
-      @updated_at = param.key?(:updated_at) ? param[:updated_at] : nil
-    end
+  def initialize(param)
+    @id         = param.key?(:id) ? param[:id] : nil
+    @name       = param[:name]
+    @tweets     = param.key?(:tweets) ? param[:tweets] : []
+    @comments   = param.key?(:comments) ? param[:comments] : []
+    @created_at = param.key?(:created_at) ? param[:created_at] : nil
+    @updated_at = param.key?(:updated_at) ? param[:updated_at] : nil
+  end
 
   def save
-    create_db_client.query(
+    @@client.query(
       'INSERT INTO tags ' +
       '(id, name)' +
       'VALUES ( ' +
@@ -55,7 +56,7 @@ class Tag
   end
 
   def self.get_all_tag_with_relation
-    db_raw = create_db_client.query(
+    db_raw = @@client.query(
       'SELECT tags.*, ' +
       'tag_tweet.tweet_id AS tweet_id, ' +
       'tag_comment.comment_id AS comment_id ' +

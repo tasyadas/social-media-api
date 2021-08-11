@@ -9,16 +9,16 @@ class Tweet
 
   attr_accessor :id, :tweet, :media, :user, :tags, :comments, :updated_at, :created_at
 
-    def initialize(param)
-      @id = param.key?(:id) ? param[:id] : nil
-      @tweet = param[:tweet]
-      @media = param.key?(:media) ? param[:media] : nil
-      @user = param[:user]
-      @tags = param.key?(:tags) ? param[:tags] : []
-      @comments = param.key?(:comments) ? param[:comments] : []
-      @created_at = param.key?(:created_at) ? param[:created_at] : nil
-      @updated_at = param.key?(:updated_at) ? param[:updated_at] : nil
-    end
+  def initialize(param)
+    @id         = param.key?(:id) ? param[:id] : nil
+    @tweet      = param[:tweet]
+    @media      = param.key?(:media) ? param[:media] : nil
+    @user       = param[:user]
+    @tags       = param.key?(:tags) ? param[:tags] : []
+    @comments   = param.key?(:comments) ? param[:comments] : []
+    @created_at = param.key?(:created_at) ? param[:created_at] : nil
+    @updated_at = param.key?(:updated_at) ? param[:updated_at] : nil
+  end
 
   def save
     filename = media.tempfile.path.split('/').last
@@ -34,6 +34,19 @@ class Tweet
         "'#{user}'" +
       ')'
     )
+
+    if tags.length > 0
+      tags.each do |tag|
+        create_db_client.query(
+          'INSERT INTO tag_tweet ' +
+          '(tweet_id, tag_id)' +
+          'VALUES ( ' +
+            "select id from tweets order by created_at desc limit 1, " +
+            "'#{tag.id}'" +
+          ')'
+        )
+      end
+    end
 
     true
   end

@@ -106,6 +106,14 @@ describe Tweet do
 
     context "when id exist" do
       it 'should return hash of Tweet model' do
+        tweet = Tweet.new({
+          :tweet => 'coba input media',
+          :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
+          :user => User.get_last_item.id
+        })
+
+        tweet.save
+
         id = Tweet.get_last_item.id
         expect(Tweet.find_single_tweet(id)).to be_a(Tweet)
       end

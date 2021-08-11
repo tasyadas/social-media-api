@@ -27,6 +27,33 @@ class Tag
     true
   end
 
+  def self.get_all_tag
+    db_raw = create_db_client.query(
+      'SELECT tags.*, ' +
+        'tag_tweet.tweet_id AS tweet_id, ' +
+        'tag_comment.comment_id AS comment_id ' +
+        'FROM tags ' +
+        'LEFT JOIN tag_tweet ON tag_tweet.tag_id = tags.id ' +
+        'LEFT JOIN tag_comment ON tag_comment.tag_id = tags.id'
+    )
+
+    tags = Array.new
+
+    db_raw.each do |data|
+
+      tag = Tag.new({
+        :id         => data["id"],
+        :name       => data["name"],
+        :created_at => data['created_at'],
+        :updated_at => data['updated_at']
+      })
+
+      tags.push(tag)
+    end
+
+    tags
+  end
+
   def self.get_all_tag_with_relation
     db_raw = create_db_client.query(
       'SELECT tags.*, ' +

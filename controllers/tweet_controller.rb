@@ -11,12 +11,12 @@ class TweetController
     tweet.validate
 
     if params.key?(:tags) and params[:tags].length > 0
-      params[:tags].each do |tag|
-        tag = Tag.get_all_tag.find{|x| x.name == tag}
+      params[:tags].each do |data|
+        tag = Tag.get_all_tag.find{|x| x.name == data}
 
         if tag.nil?
           tag = Tag.new({
-            :name => tag
+            :name => data
           })
           tag.save
         end
@@ -26,5 +26,11 @@ class TweetController
     end
 
     tweet.save
+  end
+
+  def self.filter_by_hashtag(tag)
+    tags = Tag.get_all_tag_with_relation.select{|x| x.name.downcase == tag.downcase}
+    return 'Hashtag not found' if tags.length == 0
+    tags
   end
 end

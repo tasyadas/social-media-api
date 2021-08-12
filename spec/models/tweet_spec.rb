@@ -9,6 +9,7 @@ require 'rack/test'
 
 describe Tweet do
   before(:all) do
+    @client = create_db_client(0)
     user = User.new({
       :username => 'syaaa',
       :email    => 'tasya@mail.com',
@@ -19,14 +20,15 @@ describe Tweet do
   end
 
   after(:all) do
-    create_db_client(0).query("TRUNCATE TABLE tags")
-    create_db_client(0).query("TRUNCATE TABLE comments")
-    create_db_client(0).query("TRUNCATE TABLE tweets")
-    create_db_client(0).query("TRUNCATE TABLE tag_tweet")
-    create_db_client(0).query("TRUNCATE TABLE users")
+    @client.query("TRUNCATE TABLE tag_tweet")
+    @client.query("TRUNCATE TABLE tag_comment")
+    @client.query("TRUNCATE TABLE tags")
+    @client.query("TRUNCATE TABLE comments")
+    @client.query("TRUNCATE TABLE tweets")
+    @client.query("TRUNCATE TABLE users")
   end
 
-  describe "#valid?" do
+  describe "#validate" do
     context 'when given invalid parameter' do
       it 'should return tweet cannot be empty' do
         tweet = Tweet.new({
@@ -109,7 +111,7 @@ describe Tweet do
 
     context 'when there is no data in database' do
       it 'should return empty array' do
-        create_db_client(0).query("TRUNCATE TABLE tweets")
+        @client.query("TRUNCATE TABLE tweets")
 
         expect(Tweet.get_all_tweet).to eq([])
       end
@@ -232,7 +234,7 @@ describe Tweet do
 
     context 'when table tweets is empty' do
       it 'should return There is no Tweet' do
-        create_db_client(0).query("TRUNCATE TABLE tweets")
+        @client.query("TRUNCATE TABLE tweets")
 
         expect { Tweet.get_last_item }.to raise_error("There is no Tweet")
       end

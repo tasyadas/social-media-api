@@ -7,6 +7,7 @@ require 'rack/test'
 
 describe Tag do
   before(:all) do
+    @client = create_db_client(0)
     user = User.new({
       :username => 'syaaa',
       :email    => 'tasya@mail.com',
@@ -17,11 +18,12 @@ describe Tag do
   end
 
   after(:all) do
-    create_db_client(0).query("TRUNCATE TABLE tags")
-    create_db_client(0).query("TRUNCATE TABLE comments")
-    create_db_client(0).query("TRUNCATE TABLE tweets")
-    create_db_client(0).query("TRUNCATE TABLE tag_tweet")
-    create_db_client(0).query("TRUNCATE TABLE users")
+    @client.query("TRUNCATE TABLE tag_comment")
+    @client.query("TRUNCATE TABLE tag_tweet")
+    @client.query("TRUNCATE TABLE tags")
+    @client.query("TRUNCATE TABLE comments")
+    @client.query("TRUNCATE TABLE tweets")
+    @client.query("TRUNCATE TABLE users")
   end
 
   describe "#save" do
@@ -39,7 +41,7 @@ describe Tag do
   describe "#get_all_tag" do
     context 'when there is several data from database' do
       it 'should return array of Tag instance' do
-        expect(Tag.get_all_tag_with_relation).to include(Tag)
+        expect(Tag.get_all_tag).to include(Tag)
       end
     end
 

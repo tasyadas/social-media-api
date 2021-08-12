@@ -1,6 +1,6 @@
 require_relative './user_spec'
-require_relative './tweet_spec'
 require_relative './tag_spec'
+require_relative './tweet_spec'
 require_relative '../../models/comment'
 require_relative '../../models/tweet'
 require_relative '../../models/user'
@@ -9,6 +9,7 @@ require 'rack/test'
 
 describe Comment do
   before(:all) do
+    @client = create_db_client(0)
     user = User.new({
       :username => 'syaaa',
       :email    => 'tasya@mail.com',
@@ -27,14 +28,16 @@ describe Comment do
 
     tweet.save
 
-    @tweet  = Tweet.get_last_item
+    @tweet = Tweet.get_last_item
   end
 
   after(:all) do
-    create_db_client(0).query("TRUNCATE TABLE tag_comment")
-    create_db_client(0).query("TRUNCATE TABLE tags")
-    create_db_client(0).query("TRUNCATE TABLE tweets")
-    create_db_client(0).query("TRUNCATE TABLE users")
+    @client.query("TRUNCATE TABLE tag_comment")
+    @client.query("TRUNCATE TABLE tag_tweet")
+    @client.query("TRUNCATE TABLE tags")
+    @client.query("TRUNCATE TABLE comments")
+    @client.query("TRUNCATE TABLE tweets")
+    @client.query("TRUNCATE TABLE users")
   end
 
   describe "#valid?" do

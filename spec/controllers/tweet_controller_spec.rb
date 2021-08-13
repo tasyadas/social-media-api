@@ -1,5 +1,6 @@
 require_relative '../../models/tweet'
 require_relative '../../models/user'
+require_relative '../../models/tag'
 require_relative '../../controllers/tweet_controller'
 require_relative '../models/tweet_spec'
 require 'rack/test'
@@ -16,10 +17,9 @@ describe TweetController do
     user.save
 
     @tweet = {
-      :tweet => 'coba input media',
+      :tweet => 'coba input media #coba #aja #jalanin #aja #GenerasiGigih',
       :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
-      :user  => User.get_last_item.id,
-      :tags  => %w[GenerasiGIGIH generasiGigih generasi_gigih]
+      :user  => User.get_last_item.id
     }
   end
 

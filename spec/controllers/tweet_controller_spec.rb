@@ -1,6 +1,5 @@
 require_relative '../../models/tweet'
 require_relative '../../models/user'
-require_relative '../../models/tag'
 require_relative '../../controllers/tweet_controller'
 require_relative '../models/tweet_spec'
 require 'rack/test'

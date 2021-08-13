@@ -1,3 +1,5 @@
+require 'securerandom'
+
 require_relative '../models/tweet'
 require_relative '../models/tag'
 
@@ -14,21 +16,19 @@ class TweetController
       tag = Tag.get_all_tag.find{|x| x.name == m[0]}
 
       if tag.nil?
+        id = SecureRandom.uuid
         tag = Tag.new({
+          :id   => id,
           :name => m[0]
         })
         tag.save
       end
 
-      tweet.tags << Tag.get_last_item
+      is_tag_exist = tweet.tags.any? { |h| h.id == tag.id}
+
+      tweet.tags << Tag.find_single_tag(tag.id) unless is_tag_exist
     end
 
     tweet.save
-  end
-
-  def self.filter_by_hashtag(tag)
-    tags = Tag.get_all_tag_with_relation.select{|x| (x.name).downcase == tag.downcase}
-    return 'Hashtag not found' if tags.length == 0
-    tags
   end
 end

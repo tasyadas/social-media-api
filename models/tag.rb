@@ -1,3 +1,5 @@
+require 'securerandom'
+
 require_relative '../db/mysql_connector'
 require_relative './tweet'
 
@@ -7,7 +9,7 @@ class Tag
   @@client = create_db_client
 
   def initialize(param)
-    @id         = param.key?(:id) ? param[:id] : nil
+    @id         = param.key?(:id) ? param[:id] : SecureRandom.uuid
     @name       = param[:name]
     @tweets     = param.key?(:tweets) ? param[:tweets] : []
     @comments   = param.key?(:comments) ? param[:comments] : []
@@ -20,7 +22,7 @@ class Tag
       'INSERT INTO tags ' +
       '(id, name)' +
       'VALUES ( ' +
-        'UUID(), ' +
+        "'#{id}', "+
         "'#{name}'" +
       ')'
     )

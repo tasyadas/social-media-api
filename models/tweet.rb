@@ -1,5 +1,6 @@
 require 'date'
 require 'fileutils'
+require 'securerandom'
 
 require_relative '../db/mysql_connector'
 require_relative './user'
@@ -12,7 +13,7 @@ class Tweet
   attr_accessor :id, :tweet, :media, :user, :tags, :comments, :updated_at, :created_at
 
   def initialize(param)
-    @id         = param.key?(:id) ? param[:id] : nil
+    @id         = param.key?(:id) ? param[:id] : SecureRandom.uuid
     @tweet      = param[:tweet]
     @media      = param.key?(:media) ? param[:media] : nil
     @user       = param[:user]
@@ -30,7 +31,7 @@ class Tweet
       'INSERT INTO tweets ' +
       '(id, tweet, media, user_id)' +
       'VALUES ( ' +
-        'UUID(), ' +
+        "'#{id}', "+
         "'#{tweet}', " +
         "'#{filename}', " +
         "'#{user}'" +
@@ -43,7 +44,7 @@ class Tweet
           'INSERT INTO tag_tweet ' +
           '(tweet_id, tag_id)' +
           'VALUES ( ' +
-            "(select id AS tweet_id from tweets order by created_at desc limit 1), " +
+            "'#{id}', " +
             "'#{tag.id}'" +
           ')'
         )

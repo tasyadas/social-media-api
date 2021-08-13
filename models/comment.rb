@@ -1,3 +1,5 @@
+require 'securerandom'
+
 require_relative '../db/mysql_connector'
 require_relative './tag'
 require_relative './tweet'
@@ -7,7 +9,7 @@ class Comment
   @@client = create_db_client
 
   def initialize(param)
-    @id         = param.key?(:id) ? param[:id] : nil
+    @id         = param.key?(:id) ? param[:id] : SecureRandom.uuid
     @comment    = param[:comment]
     @media      = param.key?(:media) ? param[:media] : nil
     @user       = param[:user]
@@ -25,7 +27,7 @@ class Comment
       'INSERT INTO comments ' +
       '(id, comment, media, user_id, tweet_id)' +
       'VALUES ( ' +
-        'UUID(), ' +
+        "'#{id}', " +
         "'#{comment}', " +
         "'#{filename}', " +
         "'#{user}', " +
@@ -39,7 +41,7 @@ class Comment
           'INSERT INTO tag_comment ' +
           '(comment_id, tag_id)' +
           'VALUES ( ' +
-            "(select id AS comment_id from comments order by created_at desc limit 1), " +
+            "'#{id}', " +
             "'#{tag.id}'" +
           ')'
         )

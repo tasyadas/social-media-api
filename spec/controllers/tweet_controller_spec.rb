@@ -53,18 +53,4 @@ describe TweetController do
       end
     end
   end
-
-  describe "#filter_by_hashtag" do
-    context "when there is the same tag in database" do
-      it "should return tag with it's relation" do
-        expect(TweetController.filter_by_hashtag('GENERASIGIGIH')).to include(Tag)
-      end
-    end
-
-    context "when there is no matching tag in database" do
-      it "should return Hashtag not found" do
-        expect(TweetController.filter_by_hashtag('majuBersama')).to eq('Hashtag not found')
-      end
-    end
-  end
 end

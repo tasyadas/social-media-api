@@ -1,3 +1,5 @@
+require 'securerandom'
+
 require_relative '../../models/user'
 
 describe User do
@@ -57,7 +59,10 @@ describe User do
   describe '#save' do
     context "when given valid parameter" do
       it 'should return true' do
+        id = SecureRandom.uuid
+
         user = User.new({
+          :id       => id,
           :username => 'tasyaaa',
           :email    => 'tasya@mail.com'
         })
@@ -67,7 +72,7 @@ describe User do
         expect(mock_client).to receive(:query).with(
           'INSERT INTO users (id, username, email, bio)' +
           'VALUES (' +
-          'UUID(),' +
+          "'#{id}', " +
           "'#{user.username}'," +
           "'#{user.email}'," +
           "'#{user.bio}')"

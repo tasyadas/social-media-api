@@ -1,21 +1,37 @@
+require 'securerandom'
+require 'rack/test'
+
 require_relative '../../controllers/comment_controller'
 require_relative '../../controllers/tweet_controller'
+require_relative '../../models/comment'
+require_relative '../../models/user'
+require_relative '../models/comment_spec'
 
 describe CommentController do
   before(:all) do
     @client = create_db_client(0)
+    @user_id = SecureRandom.uuid
     user = User.new({
+      :id       => @user_id,
       :username => 'syaaa',
       :email    => 'tasya@mail.com',
       :bio      => 'Welcome to my life!'
     })
-
     user.save
 
-    @tweet = {
+    @tweet_id = SecureRandom.uuid
+    TweetController.create({
+      :id    => @tweet_id,
       :tweet => 'coba input media #coba #aja #jalanin #aja #GenerasiGigih',
       :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
       :user  => User.get_last_item.id
+    })
+
+    @comment = {
+      :comment  => 'yeay akhirnya berhasil sampai disini #GenerasiGigih #generasi_gigih #semangat #hwaiting',
+      :tweet    => @tweet_id,
+      :media    => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
+      :user     => @user_id
     }
   end
 
@@ -26,6 +42,20 @@ describe CommentController do
     @client.query("TRUNCATE TABLE tweets")
     @client.query("TRUNCATE TABLE comments")
     @client.query("TRUNCATE TABLE users")
+  end
+
+  describe "#create" do
+    context "when call create method" do
+      it 'should validate the given params' do
+        comment = Comment.new(@comment)
+
+        expect(comment.validate).to eq(true)
+      end
+
+      it 'should return true' do
+        expect(CommentController.create(@comment)).to eq(true)
+      end
+    end
   end
 
   describe '#index' do

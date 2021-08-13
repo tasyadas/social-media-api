@@ -1,6 +1,7 @@
 require 'securerandom'
 
 require_relative '../models/comment'
+require_relative '../models/tag'
 
 class CommentController
   def self.index

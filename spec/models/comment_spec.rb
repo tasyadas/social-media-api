@@ -5,7 +5,6 @@ require_relative '../../models/comment'
 require_relative '../../models/tweet'
 require_relative '../../models/user'
 require_relative '../../models/tag'
-require 'rack/test'
 
 describe Comment do
   before(:all) do
@@ -22,7 +21,6 @@ describe Comment do
 
     tweet = Tweet.new({
       :tweet => 'coba input media',
-      :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
       :user  => @user.id
     })
 
@@ -126,7 +124,6 @@ describe Comment do
 
         comment = Comment.new({
           :comment => 'coba input media',
-          :media   => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
           :user    => @user.id,
           :tweet   => @tweet.id
         })

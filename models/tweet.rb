@@ -24,8 +24,8 @@ class Tweet
   end
 
   def save
-    filename = media.tempfile.path.split('/').last
-    cp(media.tempfile.path, "public/uploads/#{filename}")
+    filename = media ? media[:tempfile].path.split('/').last : media
+    cp(media[:tempfile].path, "public/uploads/#{filename}") unless filename.nil?
 
     create_db_client.query(
       'INSERT INTO tweets ' +
@@ -73,7 +73,8 @@ class Tweet
       tweet = Tweet.new({
         :id         => data["id"],
         :tweet      => data["tweet"],
-        :user       => User.find_single_user(data['user_id']),
+        :media      => data["media"],
+        :user       => data['user_id'],
         :created_at => data["created_at"],
         :updated_at => data["updated_at"],
       })
@@ -105,15 +106,18 @@ class Tweet
         tweet = Tweet.new({
           :id         => data["id"],
           :tweet      => data["tweet"],
+          :media      => data["media"],
           :user       => User.find_single_user(data['user_id']),
           :created_at => data["created_at"],
           :updated_at => data["updated_at"],
         })
+        tweet.tags.push(tag) unless tag.nil?
+        tweet.comments.push(comment) unless comment.nil?
+        tweets.push(tweet)
+      else
+        tweet.tags.push(tag) unless tag.nil?
+        tweet.comments.push(comment) unless comment.nil?
       end
-
-      tweet.tags.push(tag) unless tag.nil?
-      tweet.comments.push(comment) unless comment.nil?
-      tweets.push(tweet)
     end
 
     tweets

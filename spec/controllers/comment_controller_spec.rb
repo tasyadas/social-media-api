@@ -23,14 +23,12 @@ describe CommentController do
     TweetController.create({
       :id    => @tweet_id,
       :tweet => 'coba input media #coba #aja #jalanin #aja #GenerasiGigih',
-      :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
       :user  => User.get_last_item.id
     })
 
     @comment = {
       :comment  => 'yeay akhirnya berhasil sampai disini #GenerasiGigih #generasi_gigih #semangat #hwaiting',
       :tweet    => @tweet_id,
-      :media    => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
       :user     => @user_id
     }
   end

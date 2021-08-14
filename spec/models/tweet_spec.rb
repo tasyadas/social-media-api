@@ -92,7 +92,6 @@ describe Tweet do
 
         tweet = Tweet.new({
           :tweet => 'coba input media',
-          :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
           :user  => User.get_last_item.id
         })
         tweet.tags << tag
@@ -128,7 +127,6 @@ describe Tweet do
 
       tweet = Tweet.new({
         :tweet => 'coba input media',
-        :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
         :user  => User.get_last_item.id
       })
       tweet.tags << tag
@@ -136,7 +134,6 @@ describe Tweet do
 
       comment = Comment.new({
         :comment => 'coba input media',
-        :media   => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
         :user    => User.get_last_item.id,
         :tweet   => Tweet.get_last_item.id
       })
@@ -213,7 +210,6 @@ describe Tweet do
       it 'should return hash of Tweet model' do
         tweet = Tweet.new({
           :tweet => 'coba input media',
-          :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
           :user => User.get_last_item.id
         })
 

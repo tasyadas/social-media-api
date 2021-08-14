@@ -17,7 +17,6 @@ describe TagController do
 
     TweetController.create({
        :tweet => 'coba input media #coba #aja #jalanin #aja #GenerasiGigih',
-       :media => Rack::Test::UploadedFile.new('./erd.png', 'image/png'),
        :user  => User.get_last_item.id
      })
   end

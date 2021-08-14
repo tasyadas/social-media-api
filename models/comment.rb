@@ -20,8 +20,8 @@ class Comment
   end
 
   def save
-    filename = media.tempfile.path.split('/').last
-    cp(media.tempfile.path, "public/uploads/#{filename}")
+    filename = media ? media[:tempfile].path.split('/').last : media
+    cp(media[:tempfile].path, "public/uploads/#{filename}") unless filename.nil?
 
     @@client.query(
       'INSERT INTO comments ' +
@@ -72,8 +72,8 @@ class Comment
       comment = Comment.new({
         :id           => data["id"],
         :comment      => data["comment"],
-        :user         => User.find_single_user(data['user_id']),
-        :tweet        => Tweet.find_single_tweet(data['tweet_id']),
+        :user         => data['user_id'],
+        :tweet        => data['tweet_id'],
         :created_at   => data["created_at"],
         :updated_at   => data["updated_at"],
       })
@@ -99,7 +99,7 @@ class Comment
       comment = comments.find{|h| h.id == data['id']}
 
       if comment
-        comment.tags.push(comment) unless tag.nil?
+        comment.tags.push(tag) unless tag.nil?
       else
         comment = Comment.new({
           :id           => data["id"],

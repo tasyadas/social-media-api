@@ -12,6 +12,7 @@ class UserController
     return 'wrong parameter' unless user.valid?
 
     user.save
+    return 'user created'
   end
 
   def self.edit(params)
@@ -19,11 +20,13 @@ class UserController
 
     return 'wrong parameter' unless user.valid?
     user.update
+    return 'user updated'
   end
 
   def self.destroy(id)
     user = User.find_single_user(id)
 
     user.delete
+    return 'user deleted'
   end
 end

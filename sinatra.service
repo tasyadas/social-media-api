@@ -1,0 +1,11 @@
+[Unit]
+Description=Sinatra Application
+
+[Service]
+User=root
+WorkingDirectory=/app
+ExecStart= ruby main.rb
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

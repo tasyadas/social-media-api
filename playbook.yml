@@ -1,0 +1,96 @@
+- hosts: all
+  tasks:
+    - name: Updating repositories
+      become: yes
+      apt:
+        update_cache: yes
+    - name: Upgrading packages
+      become: yes
+      apt:
+        name: "*"
+        state: latest
+    - name: Installing build-essential, libssl-dev, zlib1g-dev, mysql-server, libmysqlclient-dev, and python3-pymysql
+      become: yes
+      apt:
+        autoclean: yes
+        autoremove: yes
+        install_recommends: no
+        only_upgrade: yes
+        name:
+          - build-essential
+          - libssl-dev
+          - zlib1g-dev
+          - mysql-server
+          - libmysqlclient-dev
+          - python3-pymysql
+    - name: Cloning rbenv repository
+      git: 
+        dest: /home/vagrant/.rbenv
+        repo: https://github.com/rbenv/rbenv.git
+    - name: Cloning ruby-build repository
+      git: 
+        dest: /home/vagrant/.rbenv/plugins/ruby-build
+        repo: https://github.com/rbenv/ruby-build.git
+    - name: Cloning ruby-vars repository
+      git: 
+        dest: /home/vagrant/.rbenv/plugins/ruby-vars
+        repo: https://github.com/rbenv/ruby-vars.git
+    - name: Exporting rbenv path
+      shell:  echo 'export PATH="/home/vagrant/.rbenv/bin:$PATH"' >> /home/vagrant/.bashrc
+    - name: Exporting rbenv eval
+      shell:  echo 'eval "$(rbenv init -)"' >> /home/vagrant/.bashrc
+    - name: Exporting ruby-build path
+      shell:  echo 'export PATH="/home/vagrant/.rbenv/plugins/ruby-build/bin:$PATH"' >> /home/vagrant/.bashrc
+    - name: Executing shell
+      shell:  exec $SHELL
+    - name: Installing ruby 3.0.1
+      shell:  /home/vagrant/.rbenv/bin/rbenv install 3.0.1
+    - name: Setting ruby 3.0.1 globally
+      shell:  /home/vagrant/.rbenv/bin/rbenv global 3.0.1
+    - name: Installing mysql2, sinatra, oj, and thin gem
+      shell:  /home/vagrant/.rbenv/shims/gem install mysql2 sinatra oj thin
+    - name: Extract deploy.tgz into /app
+      unarchive:
+        creates: /app
+        src: deploy.tgz
+        dest: /app
+    - name: Creating database user 'vagrant' and password 'vagrant' with all privileges
+      become: yes
+      mysql_user:
+        login_unix_socket:  /var/run/mysqld/mysqld.sock
+        name: vagrant
+        password: vagrant
+        priv: "*.*:ALL"
+    - name: Creating database 'db_social_media'
+      mysql_db:
+        login_password: vagrant
+        login_user: vagrant
+        name: db_social_media
+    - name: Importing 'db_social_media'
+      mysql_db:
+        login_password: vagrant
+        login_user: vagrant
+        name: db_social_media
+        state: import
+        target: /app/db_social_media.sql
+    - name: Removing 'db_social_media.sql' file
+      file:
+        path: /app/db_social_media.sql
+        state: absent
+    - name: Copying 'sinatra-service' file to /etc/systemd/system
+      become: yes
+      shell:
+        chdir: /app
+        cmd: cp sinatra.service /etc/systemd/system
+    - name: Removing 'sinatra.service' file
+      file:
+        path: /app/sinatra.service
+        state: absent
+    - name: Enabling Sinatra application
+      systemd:
+        enabled: yes
+        name: sinatra
+    - name: Starting Sinatra application
+      systemd:
+        name: sinatra
+        state: started

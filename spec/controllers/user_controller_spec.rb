@@ -1,5 +1,6 @@
 require_relative '../../controllers/user_controller'
 require_relative '../../models/user'
+require_relative '../models/user_spec'
 
 describe UserController do
   describe '#create' do
@@ -19,8 +20,8 @@ describe UserController do
     end
 
     context "when given valid parameter" do
-      it 'should return true' do
-        expect(UserController.create(@params)).to eq(true)
+      it 'should return success' do
+        expect(UserController.create(@params)).to eq('user created')
       end
     end
 
@@ -50,7 +51,7 @@ describe UserController do
           :bio        => user.bio
         }
 
-        expect(UserController.edit(param)).to eq(true)
+        expect(UserController.edit(param)).to eq('user updated')
       end
     end
   end
@@ -66,7 +67,7 @@ describe UserController do
     context "when id exist" do
       it 'should raise an error' do
         id = User.get_last_item.id
-        expect(UserController.destroy(id)).to eq(true)
+        expect(UserController.destroy(id)).to eq('user deleted')
       end
     end
   end

@@ -50,7 +50,8 @@ DROP TABLE IF EXISTS `comments`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comments` (
   `id` VARCHAR(36) NOT NULL,
-  `comment` tinytext NOT NULL,
+  `comment` TEXT NOT NULL,
+  `media` VARCHAR(255) DEFAULT NULL,
   `tweet_id` VARCHAR(36) DEFAULT NULL,
   `user_id` VARCHAR(36) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -132,7 +133,7 @@ DROP TABLE IF EXISTS `tweets`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tweets` (
   `id` VARCHAR(36) NOT NULL,
-  `tweet` tinytext NOT NULL,
+  `tweet` Text NOT NULL,
   `user_id` VARCHAR(36) DEFAULT NULL,
   `media` VARCHAR(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,

@@ -1,0 +1,376 @@
+{
+	"info": {
+		"_postman_id": "beab689b-cfa4-4b20-b877-a6fc43cc5d96",
+		"name": "GenerasiGIGIH",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "create user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "tasyadas",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "tasya@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "bio",
+									"value": "Hello World!",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit user",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "tasyaaa",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "tasya@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "bio",
+									"value": "Hello World!",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/users/ab90388f-d42c-41d8-aa5c-ba1ab5c080cc",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"ab90388f-d42c-41d8-aa5c-ba1ab5c080cc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/users/ab90388f-d42c-41d8-aa5c-ba1ab5c080cc",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"ab90388f-d42c-41d8-aa5c-ba1ab5c080cc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tweet",
+			"item": [
+				{
+					"name": "create tweet",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tweet",
+									"value": "Kegiatan Pramuka yg paling berkesan adalah pengabdian untuk masyarakat, itu akan kita kenang sepanjang hidup. Selamat Hari Pramuka ke 60 #haripramuka",
+									"type": "text"
+								},
+								{
+									"key": "media",
+									"type": "file",
+									"src": "/Users/tasyadas/Documents/ss/Screen Shot 2021-08-06 at 20.53.53.png"
+								},
+								{
+									"key": "user",
+									"value": "d5b95f4e-37eb-45d8-be14-91e1faf68b2b",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/tweets",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"tweets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "tweet list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/tweets",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"tweets"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "create comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "comment",
+									"value": "\"Sabtu 14 Agustus 2021\"\nSelamat Hari Pramuka \n*Berbakti Tanpa Henti*\n#Pramuka #PramukaJateng  #haripramuka",
+									"type": "text"
+								},
+								{
+									"key": "media",
+									"type": "file",
+									"src": "/Users/tasyadas/Documents/ss/Screen Shot 2021-08-06 at 20.59.18.png"
+								},
+								{
+									"key": "user",
+									"value": "d5b95f4e-37eb-45d8-be14-91e1faf68b2b",
+									"type": "text"
+								},
+								{
+									"key": "tweet",
+									"value": "43432776-2b7f-43f2-9dca-60725db7fce7",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comment list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tag",
+			"item": [
+				{
+					"name": "filter by hashtag",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/hashtag-filter/pramuka",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"hashtag-filter",
+								"pramuka"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Five Trending hashtag in 24 hours",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/trending-hashtag",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"trending-hashtag"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

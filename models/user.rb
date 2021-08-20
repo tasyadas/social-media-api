@@ -1,3 +1,5 @@
+require 'securerandom'
+
 require_relative '../db/mysql_connector'
 
 class User
@@ -5,7 +7,7 @@ class User
   attr_accessor :id, :username, :email, :bio, :created_at, :updated_at
 
   def initialize(param)
-    @id         = param.key?(:id) ? param[:id] : nil
+    @id         = param.key?(:id) ? param[:id] : SecureRandom.uuid
     @username   = param[:username]
     @email      = param[:email]
     @bio        = param.key?(:bio) ? param[:bio] : nil
@@ -17,7 +19,7 @@ class User
     create_db_client.query(
       'INSERT INTO users (id, username, email, bio)' +
       'VALUES (' +
-      'UUID(),' +
+      "'#{id}', " +
       "'#{username}'," +
       "'#{email}'," +
       "'#{bio}')"
@@ -56,7 +58,7 @@ class User
   end
 
   def self.get_all_user
-    db_raw = create_db_client.query("select * , id AS id from users")
+    db_raw = create_db_client.query("select * from users")
 
     users = Array.new
 
